@@ -6,14 +6,16 @@ public class ticketBooth {
 		
 		// initializing the seat plan
         final int rows = 3; // fix value of rows
-        int cols;
+        int cols, seatsSeated = 0;
         char[][] seats;
+        int totalSeats;
 
         System.out.print("Enter number of columns: ");
         cols = scanner.nextInt();
 
         seats = new char[rows][cols];
-
+        totalSeats = cols * 3;
+        
         // initializing the seat letters for occupying seats
         char seatLetter = 'A'; // Initializing the seat into letter to understand precisely the seat plan
 
@@ -33,12 +35,19 @@ public class ticketBooth {
         do { 
             System.out.println("\nMENU:");
             System.out.println("1. Assign seats");
-            System.out.println("2. Exit");
+            System.out.println("2. Preview Seats");
+            System.out.println("3. Exit");
             System.out.print("\nYour choice: ");
             choice = scanner.nextInt();
 
+            
             switch (choice) {
                 case 1:
+                	if(totalSeats == seatsSeated){ 
+                    	System.out.println("ALL SEATS OCCUPIED");
+                    	break;
+                    }
+                	
                     System.out.println("\nSEAT PLAN:");
                     System.out.println("Row #1 = VIP (1000 each)");
                     System.out.println("Row #2 = PATRON (500 each)");
@@ -61,10 +70,12 @@ public class ticketBooth {
                     int col = seatInput.charAt(1) - 'A'; // converting column letter
 
                     if (row >= 0 && row < rows && col >= 0 && col < cols) {
-                        if (!occupiedSeats[row][col]) {
+                    	
+                    	if (!occupiedSeats[row][col]) {
                             occupiedSeats[row][col] = true;
                             int tickPrice = getTickPrice(row); // getting price of tickets into method named "getTickPrice"
                             totalSales += tickPrice; // calculating
+                            seatsSeated ++;
                             System.out.println("The seat is successfully booked!");
                             System.out.println("Total price: " + tickPrice );
                         } else {
@@ -76,14 +87,30 @@ public class ticketBooth {
                     break;
 
                 case 2:
-                    System.out.println("END OF THE PROGRAM");
-                    System.out.println("\nTotal sales:" + totalSales);
-                    break;
+                	System.out.println("SEATS");
+                	for (int index = 0; index < seats.length; index++) {
+                        System.out.print((index + 1) + "  ");
+                        for (int indexTwo = 0; indexTwo < seats[index].length; indexTwo++) {
+                            if (occupiedSeats[index][indexTwo]) {
+                                System.out.print("X  ");
+                            } else {
+                                System.out.print(seats[index][indexTwo] + "  ");
+                            }
+                        }
+                        System.out.println();
+                    }
+                    
 
+                case 3:
+                	System.out.println("END OF THE PROGRAM");
+                    System.out.println("\nTotal sales: " + totalSales);
+                    break;
+                	
+                	
                 default:
                     System.out.println("Invalid choice");
             }
-        } while (choice != 2); // the program should loop unless this statement will be true
+        } while (choice != 3); // the program should loop unless this statement will be true
     }
 
     
